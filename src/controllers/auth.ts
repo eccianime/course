@@ -1,15 +1,64 @@
-import asyncHandler from "../middleware/async";
 import User from "../models/user";
+import ErrorResponse from "../utils/errorResponse";
 
-export const login = ( req: any, res: any, next: any ) => {
-    User.findAll({
-        attributes: ['id', 'email'],
-        limit: 50
-    }).then( resp => {
-        console.log({ resp })
-        res.status(200).json({
-            success: true,
-            data: resp.map( item => item.get() )
-        })
-    } )
+export const login = async ( req: any, res: any, next: any ) => {
+    const { email, password } = req.body;
+    if( !email ) return next(new ErrorResponse('Por favor, insira um mail.', 400));
+    if( !password ) return next(new ErrorResponse('Por favor, insira uma senha.', 400));
+    const user = await User.findOne({ 
+        where: {
+            email,
+            // encrypted_password: password,
+        }
+    });
+    if( !user ){
+        return next(new ErrorResponse('Credenciais Inválidas', 401));
+    }
+    res.status(200).json({
+        success: true,
+        data: user
+    })
 }
+
+/*
+exports.login = asyncHandler( async ( req, res, next ) => {
+    const { password, telephone, expoPushToken, role, email } = req.body;
+
+    if( !password ) return next(new ErrorResponse('Por favor, insira uma senha.', 400));
+    let payload = {};
+    if( role === 'ADMIN' ){
+        payload = { email }
+    }else{
+        if( !telephone ) return next(new ErrorResponse('Por favor, insira seu telefono.', 400));
+        if( telephone && !/^(\(\d{2}\)\s{1}\d{5}\s{1}\d{4})$/g.test(telephone) ) return next(new ErrorResponse('O campo Telefone não é válido.', 400));
+        if( password.length < 8 ) return next(new ErrorResponse('O campo senha não é válido.', 400));
+        payload = { telephone };
+    }
+
+    let user = await User.findOne(payload).select('+password');
+    if( !user ) return next(new ErrorResponse('Credenciais inválidas', 401));
+
+    const isMatch = await user.matchPassword(password);
+    if( !isMatch ) return next(new ErrorResponse('Credenciais inválidas', 401));
+
+    if( !user.active ){
+        logTrigger(`Usuário <${user._id}> inativo tentou entrar`, 'Auth', 'LOGIN', user.email, req.ip?.replace( /[^0-9.]/g, '' ) || req.connection?.remoteAddress?.replace( /[^0-9.]/g, '' ));
+        return next(new ErrorResponse('Seu usuário não esta ativo. Peça a um Administrador de Sistema ativar você', 500));
+    }
+
+    if( user.role === 'USER' ){
+        if( expoPushToken && user.expoPushToken !== expoPushToken ){
+            user = await User.findByIdAndUpdate(user._id, { expoPushToken } , updateOptions);
+        }
+    }
+
+    if( role === 'ADMIN' && user.role !== 'ADMIN'  ){
+        return next(new ErrorResponse('Você esta solicitando acesso a uma área restrita.', 401));
+    }
+
+    logTrigger(`Usuário <${user._id}> logado com sucesso`, 'Auth', 'LOGIN', user.email, req.ip || req.connection?.remoteAddress?.replace( /[^0-9.]/g, '' ));
+    sendTokenResponse(user, 200, res)
+    // await sendPushNotification(user.expoPushToken, `Bem-vindo(a), ${user.name} ${user.lastName}\n Você logou com sucesso`);
+})
+
+*/

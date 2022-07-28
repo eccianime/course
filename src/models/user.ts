@@ -10,13 +10,13 @@ const User = sequelize.define('user', {
     encrypted_password: DataTypes.STRING,
     reset_password_token: DataTypes.STRING,
     reset_password_sent_at: DataTypes.STRING,
-    // remember_created_at: DataTypes.STRING,
-    // sign_in_count: DataTypes.STRING,
-    // current_sign_in_at: DataTypes.STRING,
-    // last_sign_in_at: DataTypes.STRING,
-    // current_sign_in_ip: DataTypes.STRING,
-    // last_sign_in_ip: DataTypes.STRING,
-    // // created_at: DataTypes.STRING,
+    remember_created_at: DataTypes.STRING,
+    sign_in_count: DataTypes.STRING,
+    current_sign_in_at: DataTypes.STRING,
+    last_sign_in_at: DataTypes.STRING,
+    current_sign_in_ip: DataTypes.STRING,
+    last_sign_in_ip: DataTypes.STRING,
+    // created_at: DataTypes.STRING,
     // updated_at: DataTypes.STRING,
     // type: DataTypes.STRING,
     // profile_image: DataTypes.STRING,
@@ -39,7 +39,5 @@ const User = sequelize.define('user', {
 }, {
     timestamps: false
 })
-
-console.log(User === sequelize.models.User);
 
 export default User;

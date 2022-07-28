@@ -6,6 +6,8 @@ router
     .all('/', (req, res) => {
         res.redirect('/v1')
     }).all('/:anything', notFound as any )
+    .all('/:anything/:anything', notFound as any )
+    .all('/:anything/:anything/:anything', notFound as any )
     .all('/v1/:anything', (req, res) => {
         res.redirect('/v1')
     });
