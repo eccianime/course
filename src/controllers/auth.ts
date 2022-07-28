@@ -1,4 +1,4 @@
-import User from "../models/user";
+import { User } from "../models";
 import ErrorResponse from "../utils/errorResponse";
 
 export const login = async ( req: any, res: any, next: any ) => {
