@@ -4,7 +4,6 @@ import ErrorResponse from "../utils/errorResponse";
 
 export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
     const { user_id, limit } = req.query;
-    console.log({user_id, limit})
     if( !user_id ) return next(new ErrorResponse('Deve especificar do qual usuário deseja ver os Cursos.', 400));
 
     const options: FindOptions = {

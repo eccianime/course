@@ -1,4 +1,4 @@
-import { User } from "../models";
+import { Brand, User } from "../models";
 import ErrorResponse from "../utils/errorResponse";
 
 export const login = async ( req: any, res: any, next: any ) => {
@@ -9,7 +9,8 @@ export const login = async ( req: any, res: any, next: any ) => {
         where: {
             email,
             // encrypted_password: password,
-        }
+        },
+        include: [{ model: Brand, required: true }]
     });
     if( !user ){
         return next(new ErrorResponse('Credenciais Inválidas', 401));

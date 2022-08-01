@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "ts-node-dev --inspect --ignore-watch node_modules src/app.ts",
     "start": "npx nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "push": "git push origin HEAD:refs/heads/development",
+    "pull": "git pull origin development"
   },
   "keywords": [],
   "author": "",
