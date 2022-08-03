@@ -1,5 +1,7 @@
 import { FindOptions } from "sequelize";
-import { Course, Enroll } from "../models";
+import { Course, Enroll, Instructor } from "../models";
+import Content from "../models/content";
+import Section from "../models/section";
 import ErrorResponse from "../utils/errorResponse";
 
 export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
@@ -8,7 +10,17 @@ export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
 
     const options: FindOptions = {
         where: { user_id },
-        include: [{ model: Course, required: true }]
+        include: [{ 
+            model: Course, required: true,
+            include: [
+                { model: Instructor, required: true },
+                { 
+                    model: Section, required: true,
+                    include: [{ model: Content, required: true }]
+                },
+            ],
+            
+        }]
     }
     if( limit ){
         options.limit = limit
