@@ -12,9 +12,8 @@ export const login = async ( req: any, res: any, next: any ) => {
         },
         include: [{ model: Brand, required: true }]
     });
-    if( !user ){
-        return next(new ErrorResponse('Credenciais Inválidas', 401));
-    }
+    if( !user ) return next(new ErrorResponse('Credenciais Inválidas', 401));
+    if( (user as any).type !== 'Student' ) return next(new ErrorResponse('Este usuário não é um estudante', 401));
     res.status(200).json({
         success: true,
         data: user
