@@ -1,7 +1,6 @@
-import { FindOptions } from "sequelize";
+import sequelize from "../config/dbConnection";
 import { Course, Enroll, Instructor } from "../models";
 import Content from "../models/content";
-import CoursesInstructors from "../models/courses_instructors";
 import Section from "../models/section";
 import ErrorResponse from "../utils/errorResponse";
 
@@ -9,21 +8,31 @@ export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
     const { user_id, limit } = req.query;
     if( !user_id ) return next(new ErrorResponse('Deve especificar do qual usuário deseja ver os Cursos.', 400));
 
-    const options: FindOptions = {
-        where: { user_id },
-        include: [{ 
-            model: Course, required: true,
-        }]
-    }
-    if( limit ){
-        options.limit = limit
-    }
+    const [results] = await sequelize.query(`
+        select c.*, a.watched, count(co.*) total
+        from courses c
+        join enrolls e on e.course_id = c.id
+        join sections s on s.course_id = c.id
+        join contents co on co.section_id = s.id
+        join (
+            select c.id as anotherId, count(cu.*) as watched from courses c
+            join enrolls e on e.course_id = c.id
+            join sections s on s.course_id = c.id
+            join contents co on co.section_id = s.id
+            join contents_users cu on cu.content_id = co.id
+            where e.user_id = ${user_id} and cu.user_id = ${user_id}
+            group by c.id
+        ) as a on a.anotherId = c.id
+        where e.user_id = ${user_id}
+        group by c.id, a.watched
+        ${ limit ? `LIMIT ${limit}` : ''}
+        `
+    )
 
-    const courses = await Enroll.findAndCountAll(options);
     res.status(200).json({
         success: true,
-        data: courses.rows,
-        total: courses.count
+        data: results,
+        total: results
     })
 }
 
