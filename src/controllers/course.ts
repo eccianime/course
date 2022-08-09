@@ -3,7 +3,7 @@ import { ContentsUsers, Course, Instructor, Content, Section } from "../models";
 import ErrorResponse from "../utils/errorResponse";
 
 export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
-    const { user_id, limit } = req.query;
+    const { user_id, limit, course_id } = req.query;
     if( !user_id ) return next(new ErrorResponse('Deve especificar do qual usuário deseja ver os Cursos.', 400));
 
     const [results] = await sequelize.query(`
@@ -21,7 +21,7 @@ export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
             where e.user_id = ${user_id} and cu.user_id = ${user_id}
             group by c.id
         ) as a on a.anotherId = c.id
-        where e.user_id = ${user_id}
+        where e.user_id = ${user_id} ${course_id ? `and c.id = ${course_id}` : ''}
         group by c.id, a.watched
         ${ limit ? `LIMIT ${limit}` : ''}
         `
@@ -29,8 +29,7 @@ export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
 
     res.status(200).json({
         success: true,
-        data: results,
-        total: results
+        data: results
     })
 }
 
