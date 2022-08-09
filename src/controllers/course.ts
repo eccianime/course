@@ -1,7 +1,5 @@
 import sequelize from "../config/dbConnection";
-import { Course, Enroll, Instructor } from "../models";
-import Content from "../models/content";
-import Section from "../models/section";
+import { ContentsUsers, Course, Instructor, Content, Section } from "../models";
 import ErrorResponse from "../utils/errorResponse";
 
 export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
@@ -49,10 +47,27 @@ export const getCourseInstructors = async ( req: any, res: any, next: any ) => {
 
 export const getSections = async ( req: any, res: any, next: any ) => {
     const { course_id } = req.params;
+    const { user_id } = req.query;
     const sections = await Section.findAll({
         where: { course_id },
         include: [{ model: Content, required: true }]
     });
+
+    if( user_id ){
+        const watchedContents = await Content.findAll({
+            include: [
+                { model: Section, required: true, where: { course_id } },
+                { model: ContentsUsers, required: true, where: { user_id } }
+            ]
+        })
+        sections.forEach( section => {
+            ((section as any).contents as any[]).forEach( content => {
+                const isCompleted = watchedContents.some( wc => (wc.get('contents_users') as any).some( (cu: any) => cu.content_id === content.id ) )
+                content.dataValues.isCompleted = isCompleted;
+            } )
+        } )  
+    }
+    
     res.status(200).json({
         success: true,
         data: sections,

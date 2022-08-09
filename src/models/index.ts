@@ -6,6 +6,7 @@ import User from './user'
 import Instructor from './instructor'
 import Section from './section'
 import Content from './content'
+import ContentsUsers from './contents_users'
 
 User.hasMany(Enroll, { foreignKey: 'user_id' });
 Enroll.belongsTo(User, { foreignKey: 'user_id' });
@@ -25,4 +26,7 @@ Section.belongsTo(Course, { foreignKey: 'course_id' });
 Section.hasMany(Content, { foreignKey: 'section_id' });
 Content.belongsTo(Section, { foreignKey: 'section_id' });
 
-export { Course, Enroll, User, Brand, Instructor }
+Content.hasMany(ContentsUsers, { foreignKey: 'content_id' });
+ContentsUsers.belongsTo(Content, { foreignKey: 'content_id' });
+
+export { Course, Enroll, User, Brand, Instructor, ContentsUsers, Content, Section }

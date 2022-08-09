@@ -18,6 +18,7 @@ dotenv.config({ path: path.join(__dirname, '/config/config.env') });
 
 import authRoutes from './routes/auth'
 import courseRoutes from './routes/course'
+import contentRoutes from './routes/contents'
 
 import notFoundRoute from './routes/notFound';
 import sequelize from './config/dbConnection';
@@ -51,6 +52,7 @@ if( process.env.NODE_ENV === 'development' ){
     app.use(morgan('dev'));
 }
 
+app.use('/v1/contents', contentRoutes);
 app.use('/v1/courses', courseRoutes);
 app.use('/v1/auth', authRoutes);
 app.use('/', notFoundRoute);

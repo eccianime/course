@@ -23,7 +23,7 @@ export const login = async ( req: any, res: any, next: any ) => {
     if( (user as any).type !== 'Student' ) return next(new ErrorResponse('Este usuário não é um estudante', 401));
     
     const foundUser = user.get({ plain: true });
-    const altColors = (JSON.parse(`{"alt_${foundUser.brand.colors.substring( foundUser.brand.colors.indexOf('primary'), foundUser.brand.colors.indexOf('social') + 24 ).trim().replace(/\n/g, ',').replace(/,\s{2,}/g, ',"alt_').replace(/:\s{1,}/g, '":')}}`))
+    const altColors = (JSON.parse(`{"alt_${foundUser.brand.colors.substring( foundUser.brand.colors.indexOf('primary'), foundUser.brand.colors.indexOf('social') + 24 ).trim().replace(/\n/g, ', ').replace(/,\s{1,}/g, ',"alt_').replace(/:\s{1,}/g, '":')}}`))
     
     foundUser.brand = {
         ...foundUser.brand,
