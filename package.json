@@ -2,13 +2,14 @@
   "name": "coursify_app_server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "dev": "ts-node-dev --inspect --ignore-watch node_modules src/app.ts",
-    "start": "npx nodemon src/index.js",
+    "start": "npx nodemon dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "push": "git push origin HEAD:refs/heads/development",
-    "pull": "git pull origin development"
+    "pull": "git pull origin development",
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "",
