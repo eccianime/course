@@ -2,11 +2,14 @@
   "name": "coursify_app_server",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "dev": "ts-node-dev --inspect --ignore-watch node_modules src/app.ts",
-    "start": "npx nodemon src/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "npx nodemon dist/app.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "push": "git push origin HEAD:refs/heads/development",
+    "pull": "git pull origin development",
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "",
@@ -37,6 +40,7 @@
     "sequelize": "^6.21.3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/cookie-parser": "^1.4.3",
     "@types/cors": "^2.8.12",
     "@types/express": "^4.17.13",

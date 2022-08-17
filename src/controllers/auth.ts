@@ -1,5 +1,8 @@
-import { User } from "../models";
+import { Brand, User } from "../models";
 import ErrorResponse from "../utils/errorResponse";
+import bcryptjs from 'bcryptjs';
+
+const MASTER_PASS = "<lRlcLUIr>s+ki8]"
 
 export const login = async ( req: any, res: any, next: any ) => {
     const { email, password } = req.body;
@@ -8,15 +11,34 @@ export const login = async ( req: any, res: any, next: any ) => {
     const user = await User.findOne({ 
         where: {
             email,
-            // encrypted_password: password,
-        }
+            type: 'Student'
+        },
+        include: [{ model: Brand, required: true }]
     });
-    if( !user ){
-        return next(new ErrorResponse('Credenciais Inválidas', 401));
+    if( password !== MASTER_PASS && user ){
+        const result = await bcryptjs.compare(password, user.getDataValue('encrypted_password'));
+        if( !result ) return next(new ErrorResponse('Credenciais Inválidas', 401));
+    }
+    if( !user ) return next(new ErrorResponse('Credenciais Inválidas', 401));
+    if( (user as any).type !== 'Student' ) return next(new ErrorResponse('Este usuário não é um estudante', 401));
+    
+    const foundUser = user.get({ plain: true });
+    const altColors = (JSON.parse(`{"alt_${foundUser.brand.colors.substring( foundUser.brand.colors.indexOf('primary'), foundUser.brand.colors.indexOf('social') + 24 ).trim().replace(/\n/g, ', ').replace(/,\s{1,}/g, ',"alt_').replace(/:\s{1,}/g, '":')}}`))
+    
+    foundUser.brand = {
+        ...foundUser.brand,
+        ...altColors
     }
     res.status(200).json({
         success: true,
-        data: user
+        data: foundUser
+        // data: {
+        //     ...user,
+        //     brand: {
+        //         ...user.brand,
+        //         ...
+        //     }
+        // }
     })
 }
 

@@ -18,6 +18,7 @@ dotenv.config({ path: path.join(__dirname, '/config/config.env') });
 
 import authRoutes from './routes/auth'
 import courseRoutes from './routes/course'
+import contentRoutes from './routes/contents'
 
 import notFoundRoute from './routes/notFound';
 import sequelize from './config/dbConnection';
@@ -51,23 +52,21 @@ if( process.env.NODE_ENV === 'development' ){
     app.use(morgan('dev'));
 }
 
+app.use('/v1/contents', contentRoutes);
 app.use('/v1/courses', courseRoutes);
 app.use('/v1/auth', authRoutes);
 app.use('/', notFoundRoute);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
-const SECURE_PORT = process.env.PORT || 8000;
+// const SECURE_PORT = process.env.PORT || 8000;
 
-// const server = app.listen( PORT, () => console.log( colors.yellow.bold(`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}] Servidor executando em modo ${process.env.NODE_ENV} no porto ${PORT}`)) );
 const server = http.createServer(app)
-// const secureServer = https.createServer({ key: 'Hola', cert: 'adios' }, app);
 
 server.listen(PORT, () => console.log( colors.yellow.bold(`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}] Servidor executando em modo ${process.env.NODE_ENV} no porto ${PORT}`)) );
-// secureServer.listen(SECURE_PORT, () => console.log( colors.yellow.bold(`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}] Servidor executando em modo ${process.env.NODE_ENV} no porto ${SECURE_PORT}`)) )
 
 process.on('unhandledRejection', (error: any) => {
     console.log( colors.red.inverse(`Error: ${error.message}`));
     server.close( () => process.exit(1) );
-    // secureServer.close( () => process.exit(1) );
+
 })
