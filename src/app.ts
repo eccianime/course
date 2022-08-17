@@ -28,6 +28,7 @@ const app = express();
 
 ( async () => {
     try {
+        console.log(process.env.PG_CONNECTION_DATABASE);
         await sequelize.authenticate();
         console.log( colors.green.bold('Conectado ao servidor com sucesso.'));
     } catch (error) {
