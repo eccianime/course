@@ -8,6 +8,7 @@
     "start": "npx nodemon dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "push": "git push origin HEAD:refs/heads/development",
+    "push:heroku": "git push heroku master",
     "pull": "git pull origin development",
     "build": "tsc -p ."
   },
