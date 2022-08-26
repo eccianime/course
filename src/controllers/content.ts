@@ -22,6 +22,9 @@ export const addCompletedContent = asyncHandler( async ( req: any, res: any, nex
             await ContentsUsers.create({
                 user_id, content_id
             })
+
+
+            // Preciso uma mudança para um novo deploy
             res.status(200).json({
                 success: true,
                 course_id: targetCourse?.get('course_id')
