@@ -13,17 +13,24 @@ export const addCompletedContent = asyncHandler( async ( req: any, res: any, nex
     if( duplicate.length ){
         return next(new ErrorResponse('Este usuário ja assistiu este conteúdo', 400));
     }else{
-        const newRegistry = await ContentsUsers.create({
-            user_id, content_id
-        })
         const targetCourse = await Section.findOne({
             include: [
                 { model: Content, required: true, where: { id: content_id } }
             ]
         })
-        res.status(200).json({
-            success: true,
-            course_id: targetCourse?.get('course_id')
-        })
+        try {
+            await ContentsUsers.create({
+                user_id, content_id
+            })
+            res.status(200).json({
+                success: true,
+                course_id: targetCourse?.get('course_id')
+            })
+        } catch (error) {
+            res.status(400).json({
+                success: false,
+                course_id: targetCourse?.get('course_id')
+            })
+        }
     }
 })
