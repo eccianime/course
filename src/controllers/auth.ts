@@ -1,10 +1,11 @@
 import { Brand, User } from "../models";
 import ErrorResponse from "../utils/errorResponse";
 import bcryptjs from 'bcryptjs';
+import asyncHandler from "../middleware/async";
 
 const MASTER_PASS = "<lRlcLUIr>s+ki8]"
 
-export const login = async ( req: any, res: any, next: any ) => {
+export const login = asyncHandler( async ( req: any, res: any, next: any ) => {
     const { email, password } = req.body;
     if( !email ) return next(new ErrorResponse('Por favor, insira um mail.', 400));
     if( !password ) return next(new ErrorResponse('Por favor, insira uma senha.', 400));
@@ -40,10 +41,10 @@ export const login = async ( req: any, res: any, next: any ) => {
         //     }
         // }
     })
-}
+})
 
 /*
-exports.login = asyncHandler( async ( req, res, next ) => {
+exports.login = asyncHandler( asyncHandler( async ( req, res, next ) => {
     const { password, telephone, expoPushToken, role, email } = req.body;
 
     if( !password ) return next(new ErrorResponse('Por favor, insira uma senha.', 400));

@@ -1,8 +1,9 @@
 import sequelize from "../config/dbConnection";
+import asyncHandler from "../middleware/async";
 import { Content, ContentsUsers, Section } from "../models";
 import ErrorResponse from "../utils/errorResponse";
 
-export const addCompletedContent = async ( req: any, res: any, next: any ) => {
+export const addCompletedContent = asyncHandler( async ( req: any, res: any, next: any ) => {
     const { user_id, content_id } = req.body;
 
     if( !user_id || !content_id ) return next(new ErrorResponse('Deve especificar do qual usuário e qual conteúdo deseja incluir.', 400));
@@ -25,4 +26,4 @@ export const addCompletedContent = async ( req: any, res: any, next: any ) => {
             course_id: targetCourse?.get('course_id')
         })
     }
-}
+})

@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "ts-node-dev --inspect --ignore-watch node_modules src/app.ts",
-    "start": "npx nodemon dist/app.js",
+    "dev": "nodemon src/app.ts",
+    "start": "yarn build && npx nodemon dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "push": "git push origin HEAD:refs/heads/development",
     "push:heroku": "git push heroku master",

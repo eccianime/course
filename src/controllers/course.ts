@@ -1,8 +1,9 @@
 import sequelize from "../config/dbConnection";
+import asyncHandler from "../middleware/async";
 import { ContentsUsers, Course, Instructor, Content, Section } from "../models";
 import ErrorResponse from "../utils/errorResponse";
 
-export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
+export const getEnrolledCourses = asyncHandler(async ( req: any, res: any, next: any ) => {
     const { user_id, limit, course_id } = req.query;
     if( !user_id ) return next(new ErrorResponse('Deve especificar do qual usuário deseja ver os Cursos.', 400));
 
@@ -31,9 +32,9 @@ export const getEnrolledCourses = async ( req: any, res: any, next: any ) => {
         success: true,
         data: results
     })
-}
+})
 
-export const getCourseInstructors = async ( req: any, res: any, next: any ) => {
+export const getCourseInstructors = asyncHandler(async ( req: any, res: any, next: any ) => {
     const { course_id } = req.params;
     const instructors = await Instructor.findAll({
         include: [{ model: Course, required: true, where: { id: course_id } }]
@@ -42,9 +43,9 @@ export const getCourseInstructors = async ( req: any, res: any, next: any ) => {
         success: true,
         data: instructors,
     })
-}
+})
 
-export const getSections = async ( req: any, res: any, next: any ) => {
+export const getSections = asyncHandler(async ( req: any, res: any, next: any ) => {
     const { course_id } = req.params;
     const { user_id } = req.query;
     const sections = await Section.findAll({
@@ -71,4 +72,4 @@ export const getSections = async ( req: any, res: any, next: any ) => {
         success: true,
         data: sections,
     })
-}
+})
