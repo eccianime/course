@@ -3,7 +3,7 @@ import asyncHandler from "../middleware/async";
 import { Content, ContentsUsers, Section } from "../models";
 import ErrorResponse from "../utils/errorResponse";
 
-export const addCompletedContent = asyncHandler( async ( req: any, res: any, next: any ) => {
+export const addCompletedContent = async ( req: any, res: any, next: any ) => {
     const { user_id, content_id } = req.body;
 
     if( !user_id || !content_id ) return next(new ErrorResponse('Deve especificar do qual usuário e qual conteúdo deseja incluir.', 400));
@@ -22,18 +22,16 @@ export const addCompletedContent = asyncHandler( async ( req: any, res: any, nex
             await ContentsUsers.create({
                 user_id, content_id
             })
-
-
-            // Preciso uma mudança para um novo deploy
             res.status(200).json({
                 success: true,
                 course_id: targetCourse?.get('course_id')
             })
-        } catch (error) {
-            res.status(400).json({
+        } catch (error: any) {
+            res.status(200).json({
                 success: false,
+                message: error.name,
                 course_id: targetCourse?.get('course_id')
             })
         }
     }
-})
+}
