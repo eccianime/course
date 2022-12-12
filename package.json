@@ -4,13 +4,13 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon src/app.ts",
-    "start": "npx nodemon dist/app.js",
+    "dev": "nodemon api/index.ts",
+    "start": "yarn build && npx nodemon dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "push": "git push origin HEAD:refs/heads/development",
     "push:vercel": "git push vercel HEAD:refs/heads/development",
     "pull": "git pull origin development",
-    "build": "yarn install && typescript && tsc -p ."
+    "build": "tsc -p ."
   },
   "keywords": [],
   "author": "",
