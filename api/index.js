@@ -26,8 +26,7 @@ const cors_1 = __importDefault(require("cors"));
 // import https from 'https';
 const http_1 = __importDefault(require("http"));
 const error_1 = __importDefault(require("./middleware/error"));
-console.log("NODE_ENV1: ", process.env.NODE_ENV);
-dotenv_1.default.config({ path: path_1.default.join(__dirname, "/config/config.env") });
+dotenv_1.default.config({ path: path_1.default.join(__dirname, '/config/config.env') });
 const auth_1 = __importDefault(require("./routes/auth"));
 const course_1 = __importDefault(require("./routes/course"));
 const contents_1 = __importDefault(require("./routes/contents"));
@@ -37,14 +36,14 @@ const app = (0, express_1.default)();
 (() => __awaiter(void 0, void 0, void 0, function* () {
     try {
         yield dbConnection_1.default.authenticate();
-        console.log(colors_1.default.green.bold("Conectado ao servidor com sucesso."));
+        console.log(colors_1.default.green.bold('Conectado ao servidor com sucesso.'));
     }
     catch (error) {
-        console.log(colors_1.default.red.inverse.bold("Erro ao tentar conectar ao servidor"));
+        console.log(colors_1.default.red.inverse.bold('Erro ao tentar conectar ao servidor'));
         console.log(error);
     }
 }))();
-app.use(express_1.default.json({ limit: "50mb" }));
+app.use(express_1.default.json({ limit: '50mb' }));
 app.use((0, express_fileupload_1.default)());
 app.use((0, helmet_1.default)());
 app.use((0, cookie_parser_1.default)());
@@ -54,20 +53,19 @@ app.use((0, express_rate_limit_1.default)({
     max: 1000,
 }));
 app.use((0, hpp_1.default)());
-if (process.env.NODE_ENV === "development") {
-    app.use((0, morgan_1.default)("dev"));
+if (process.env.NODE_ENV === 'development') {
+    app.use((0, morgan_1.default)('dev'));
 }
-app.use("/v1/contents", contents_1.default);
-app.use("/v1/courses", course_1.default);
-app.use("/v1/auth", auth_1.default);
-app.use("/", notFound_1.default);
+app.use('/v1/contents', contents_1.default);
+app.use('/v1/courses', course_1.default);
+app.use('/v1/auth', auth_1.default);
+app.use('/', notFound_1.default);
 app.use(error_1.default);
-const PORT = process.env.PORT || 4632;
+const PORT = process.env.PORT || 8080;
 // const SECURE_PORT = process.env.PORT || 8000;
 const server = http_1.default.createServer(app);
-console.log("NODE_ENV2: ", process.env.NODE_ENV);
 server.listen(PORT, () => console.log(colors_1.default.yellow.bold(`[${new Date().toLocaleDateString()} ${new Date().toLocaleTimeString()}] Servidor executando em modo ${process.env.NODE_ENV} no porto ${PORT}`)));
-process.on("unhandledRejection", (error) => {
+process.on('unhandledRejection', (error) => {
     console.log(colors_1.default.red.inverse(`Error: ${error.message}`));
     server.close(() => process.exit(1));
 });

@@ -8,7 +8,7 @@
     "start": "yarn build && npx nodemon dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "push": "git push origin HEAD:refs/heads/development",
-    "push:heroku": "git push heroku master",
+    "push:vercel": "git push vercel HEAD:refs/heads/development",
     "pull": "git pull origin development",
     "build": "tsc -p ."
   },
