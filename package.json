@@ -10,7 +10,7 @@
     "push": "git push origin HEAD:refs/heads/development",
     "push:vercel": "git push vercel HEAD:refs/heads/development",
     "pull": "git pull origin development",
-    "build": "tsc -p ."
+    "build": "npm i typescript && tsc -p ."
   },
   "keywords": [],
   "author": "",
