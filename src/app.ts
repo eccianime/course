@@ -16,7 +16,7 @@ import errorHandler from "./middleware/error";
 
 console.log("NODE_ENV1: ", process.env.NODE_ENV);
 
-dotenv.config({ path: path.join(__dirname, "/config/config.env") });
+dotenv.config();
 
 import authRoutes from "./routes/auth";
 import courseRoutes from "./routes/course";

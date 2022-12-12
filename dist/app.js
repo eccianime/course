@@ -14,7 +14,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const dotenv_1 = __importDefault(require("dotenv"));
-const path_1 = __importDefault(require("path"));
 const colors_1 = __importDefault(require("colors"));
 const helmet_1 = __importDefault(require("helmet"));
 const morgan_1 = __importDefault(require("morgan"));
@@ -27,7 +26,7 @@ const cors_1 = __importDefault(require("cors"));
 const http_1 = __importDefault(require("http"));
 const error_1 = __importDefault(require("./middleware/error"));
 console.log("NODE_ENV1: ", process.env.NODE_ENV);
-dotenv_1.default.config({ path: path_1.default.join(__dirname, "/config/config.env") });
+dotenv_1.default.config();
 const auth_1 = __importDefault(require("./routes/auth"));
 const course_1 = __importDefault(require("./routes/course"));
 const contents_1 = __importDefault(require("./routes/contents"));
